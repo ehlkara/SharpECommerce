@@ -3,9 +3,9 @@ using SharpEcommerce.API.Entities;
 
 namespace SharpEcommerce.API.Data
 {
-    public class EcommerceContext : DbContext
+    public class EcommerceDbContext : DbContext
     {
-        public EcommerceContext(DbContextOptions options) : base(options)
+        public EcommerceDbContext(DbContextOptions options) : base(options)
         {
         }
 
