@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using SharpEcommerce.API.Data;
+using SharpEcommerce.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

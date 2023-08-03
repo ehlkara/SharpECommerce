@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SharpEcommerce.API.Data;
-using SharpEcommerce.API.Entities;
+using SharpEcommerce.Core.Entities;
+using SharpEcommerce.Infrastructure.Data;
 
 namespace SharpEcommerce.API.Controllers
 {

@@ -1,4 +1,4 @@
-﻿namespace SharpEcommerce.API.Entities
+﻿namespace SharpEcommerce.Core.Entities
 {
     public class Product
     {

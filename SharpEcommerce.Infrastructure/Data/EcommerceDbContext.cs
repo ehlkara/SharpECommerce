@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SharpEcommerce.API.Entities;
+using SharpEcommerce.Core.Entities;
 
-namespace SharpEcommerce.API.Data
+namespace SharpEcommerce.Infrastructure.Data
 {
     public class EcommerceDbContext : DbContext
     {

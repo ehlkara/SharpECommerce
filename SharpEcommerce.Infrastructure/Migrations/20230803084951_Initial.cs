@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace SharpEcommerce.API.Migrations
+namespace SharpEcommerce.Infrastructure.Migrations
 {
     /// <inheritdoc />
     public partial class Initial : Migration
