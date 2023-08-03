@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Infrastructure.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<EcommerceDbContext>(opts =>
 {
     opts.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 
