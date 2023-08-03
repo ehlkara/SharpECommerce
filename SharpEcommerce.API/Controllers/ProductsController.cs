@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.API.Data;
+using SharpEcommerce.API.Entities;
 
 namespace SharpEcommerce.API.Controllers
 {
@@ -6,16 +9,25 @@ namespace SharpEcommerce.API.Controllers
     [ApiController]
     public class ProductsController : ControllerBase
     {
-        [HttpGet]
-        public string GetProducts()
+        private readonly EcommerceDbContext _context;
+
+        public ProductsController(EcommerceDbContext context)
         {
-            return "this will be a list of products";
+            _context = context;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<Product>>> GetProducts()
+        {
+            var products = await _context.Products.ToListAsync();
+
+            return products;
         }
 
         [HttpGet("{id}")]
-        public string GetProduct(int id)
+        public async Task<ActionResult<Product>> GetProduct(int id)
         {
-            return "this will be a product";
+            return await _context.Products.FindAsync(id);
         }
     }
 }
