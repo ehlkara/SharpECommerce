@@ -1,23 +1,26 @@
-﻿using SharpEcommerce.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SharpEcommerce.Infrastructure.Data
 {
     public class ProductRepository : IProductRepository
     {
-        public Task<Product> GetProductByIdAsync(int id)
+        private readonly EcommerceDbContext _context;
+
+        public ProductRepository(EcommerceDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IReadOnlyList<Product>> GetProductsAsync()
+        public async Task<Product> GetProductByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Products.FindAsync(id);
+        }
+
+        public async Task<IReadOnlyList<Product>> GetProductsAsync()
+        {
+            return await _context.Products.ToListAsync();
         }
     }
 }
