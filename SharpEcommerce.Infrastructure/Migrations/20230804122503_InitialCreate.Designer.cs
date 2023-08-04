@@ -11,7 +11,7 @@ using SharpEcommerce.Infrastructure.Data;
 namespace SharpEcommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(EcommerceDbContext))]
-    [Migration("20230804083007_InitialCreate")]
+    [Migration("20230804122503_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -38,14 +38,15 @@ namespace SharpEcommerce.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("PictureUrl")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("ProductBrandId")
                         .HasColumnType("integer");
