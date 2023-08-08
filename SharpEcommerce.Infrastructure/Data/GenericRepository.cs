@@ -1,18 +1,26 @@
-﻿using SharpEcommerce.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
 
 namespace SharpEcommerce.Infrastructure.Data
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity
     {
-        public Task<T> GetByIdAsync(int id)
+        private readonly EcommerceDbContext _context;
+
+        public GenericRepository(EcommerceDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<IReadOnlyList<T>> ListAllAsync()
+        public async Task<T> GetByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Set<T>().FindAsync(id);
+        }
+
+        public async Task<IReadOnlyList<T>> ListAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
         }
     }
 }
