@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
+using SharpEcommerce.Core.Specifications;
 
 namespace SharpEcommerce.API.Controllers
 {
@@ -23,7 +24,9 @@ namespace SharpEcommerce.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
-            var products = await _productsRepo.ListAllAsync();
+            var spec = new ProductsWithTypesAndBrandSpecification();
+
+            var products = await _productsRepo.ListAsync(spec);
 
             return Ok(products);
         }
