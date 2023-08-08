@@ -12,7 +12,7 @@ namespace SharpEcommerce.Infrastructure.Data
 
             if(spec.Criteria != null)
             {
-                query = query.Where(spec.Criteria);
+                query = query.Where(spec.Criteria); // p => p.ProductTypeId == id
             }
 
             query = spec.Includes.Aggregate(query, (current, include) => current.Include(include));
