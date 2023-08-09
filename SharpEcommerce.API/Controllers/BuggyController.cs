@@ -30,6 +30,8 @@ namespace SharpEcommerce.API.Controllers
         {
             var thing = _context.Products.Find(42);
 
+            var thingToReturn = thing.ToString();
+
             return Ok();
         }
         [HttpGet("badrequest")]
