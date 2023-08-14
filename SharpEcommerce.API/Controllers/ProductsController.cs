@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using SharpEcommerce.API.Dtos;
+using SharpEcommerce.API.Errors;
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Core.Specifications;
@@ -34,11 +35,15 @@ namespace SharpEcommerce.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
             var spec = new ProductsWithTypesAndBrandSpecification(id);
 
             var product = await _productsRepo.GetEntityWithSpec(spec);
+
+            if (product == null) return NotFound(new ApiResponse(404));
 
             return _mapper.Map<Product, ProductToReturnDto>(product);
         }
