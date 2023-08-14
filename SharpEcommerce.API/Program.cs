@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.API.Middleware;
 using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Infrastructure.Data;
 
@@ -23,6 +24,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseStatusCodePagesWithReExecute("/errors/{0}");
 
 if (app.Environment.IsDevelopment())
