@@ -25,9 +25,9 @@ namespace SharpEcommerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts()
+        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts(string sort)
         {
-            var spec = new ProductsWithTypesAndBrandSpecification();
+            var spec = new ProductsWithTypesAndBrandSpecification(sort);
 
             var products = await _productsRepo.ListAsync(spec);
 
