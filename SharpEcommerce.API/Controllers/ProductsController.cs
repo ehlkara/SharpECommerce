@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SharpEcommerce.API.Dtos;
 using SharpEcommerce.API.Errors;
+using SharpEcommerce.API.Helpers;
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Core.Specifications;
@@ -25,13 +26,19 @@ namespace SharpEcommerce.API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<ProductToReturnDto>>> GetProducts(string sort,int? brandId, int? typeId)
+        public async Task<ActionResult<Pagination<ProductToReturnDto>>> GetProducts([FromQuery]ProductSpecParams productParams)
         {
-            var spec = new ProductsWithTypesAndBrandSpecification(sort, brandId, typeId);
+            var spec = new ProductsWithTypesAndBrandSpecification(productParams);
+
+            var countSpec = new ProductWithFiltersForCountSpecification(productParams);
+
+            var totalItems = await _productsRepo.CountAsync(countSpec);
 
             var products = await _productsRepo.ListAsync(spec);
 
-            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+
+            return Ok(new Pagination<ProductToReturnDto>(productParams.PageIndex, productParams.PageSize, totalItems, data));
         }
 
         [HttpGet("{id}")]
