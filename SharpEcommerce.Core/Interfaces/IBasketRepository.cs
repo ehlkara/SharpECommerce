@@ -6,7 +6,7 @@ namespace SharpEcommerce.Core.Interfaces
 	{
 		Task<CustomerBasket> GetBasketAsync(string basketId);
 		Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket);
-		Task<bool> DeleteBasketAsync(string basketId);
+		Task<bool> DeleteBasketAsync(string basketId);	
 	}
 }
 
