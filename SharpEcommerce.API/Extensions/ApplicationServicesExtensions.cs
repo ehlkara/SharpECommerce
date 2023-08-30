@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SharpEcommerce.API.Errors;
 using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Infrastructure.Data;
+using StackExchange.Redis;
 
 namespace SharpEcommerce.API.Extensions
 {
@@ -17,7 +18,11 @@ namespace SharpEcommerce.API.Extensions
             {
                 opts.UseNpgsql(config.GetConnectionString("DefaultConnection"));
             });
-
+            services.AddSingleton<IConnectionMultiplexer>(c =>
+            {
+                var options = ConfigurationOptions.Parse(config.GetConnectionString("Redis"));
+                return ConnectionMultiplexer.Connect(options);
+            });
             services.AddScoped<IProductRepository, ProductRepository>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
