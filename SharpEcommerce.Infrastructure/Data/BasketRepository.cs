@@ -1,28 +1,40 @@
-﻿using System;
+﻿using System.Text.Json;
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
+using StackExchange.Redis;
 
 namespace SharpEcommerce.Infrastructure.Data
 {
-	public class BasketRepository : IBasketRepository
+    public class BasketRepository : IBasketRepository
 	{
-		public BasketRepository()
+        private readonly IDatabase _db;
+
+		public BasketRepository(IConnectionMultiplexer redis)
 		{
+            _db = redis.GetDatabase();
 		}
 
-        public Task<bool> DeleteBasketAsync(string basketId)
+        public CustomerBasket JsonSeriliaze { get; private set; }
+
+        public async Task<bool> DeleteBasketAsync(string basketId)
         {
-            throw new NotImplementedException();
+            return await _db.KeyDeleteAsync(basketId);
         }
 
-        public Task<CustomerBasket> GetBasketAsync(string basketId)
+        public async Task<CustomerBasket> GetBasketAsync(string basketId)
         {
-            throw new NotImplementedException();
+            var data = await _db.StringGetAsync(basketId);
+
+            return data.IsNullOrEmpty ? null : JsonSerializer.Deserialize<CustomerBasket>(data);
         }
 
-        public Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
+        public async Task<CustomerBasket> UpdateBasketAsync(CustomerBasket basket)
         {
-            throw new NotImplementedException();
+            var created = await _db.StringSetAsync(basket.Id, JsonSerializer.Serialize(basket), TimeSpan.FromDays(30));
+
+            if (!created) return null;
+
+            return await GetBasketAsync(basket.Id);
         }
     }
 }
