@@ -23,4 +23,10 @@
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Data\Identity\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Data\Identity\" />
+  </ItemGroup>
 </Project>
