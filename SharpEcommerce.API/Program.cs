@@ -1,7 +1,11 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SharpEcommerce.API.Extensions;
 using SharpEcommerce.API.Middleware;
+using SharpEcommerce.Core.Entities.Identity;
 using SharpEcommerce.Infrastructure.Data;
+using SharpEcommerce.Infrastructure.Data.Identity;
+using SharpEcommerce.Infrastructure.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +34,7 @@ app.UseCors("CorsPolicy");
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
@@ -37,12 +42,16 @@ app.MapControllers();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<EcommerceDbContext>();
+var identityContext = services.GetRequiredService<AppIdentityDbContext>();
+var userManager = services.GetRequiredService<UserManager<AppUser>>();
 var logger = services.GetRequiredService<ILogger<Program>>();
 
 try
 {
     await context.Database.MigrateAsync();
+    await identityContext.Database.MigrateAsync();
     await EcommerceContextSeed.SeedAsync(context);
+    await AppIdentityDbContextSeed.SeedUserAsync(userManager);
 }
 catch (Exception ex)
 {

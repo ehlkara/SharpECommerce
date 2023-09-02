@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using SharpEcommerce.Core.Entities.Identity;
 using SharpEcommerce.Infrastructure.Data.Identity;
 
 namespace SharpEcommerce.API.Extensions
@@ -11,6 +13,15 @@ namespace SharpEcommerce.API.Extensions
 			{
 				opt.UseNpgsql(config.GetConnectionString("IdentityConnection"));
 			});
+
+			services.AddIdentityCore<AppUser>(opt =>
+			{
+				// add identity options here
+			}).AddEntityFrameworkStores<AppIdentityDbContext>()
+			.AddSignInManager<SignInManager<AppUser>>();
+
+			services.AddAuthentication();
+			services.AddAuthorization();
 			
 			return services;
 		}
