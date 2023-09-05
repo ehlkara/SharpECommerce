@@ -18,7 +18,7 @@ namespace SharpEcommerce.API.Controllers
         [Authorize]
         public ActionResult<string> GetSecretText()
         {
-            return "secret stuff"
+            return "secret stuff";
         }
 
         [HttpGet("notfound")]
