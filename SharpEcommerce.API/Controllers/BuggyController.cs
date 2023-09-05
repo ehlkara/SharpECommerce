@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SharpEcommerce.API.Errors;
 using SharpEcommerce.Infrastructure.Data;
 
@@ -11,6 +12,13 @@ namespace SharpEcommerce.API.Controllers
         public BuggyController(EcommerceDbContext context)
         {
             _context = context;
+        }
+
+        [HttpGet("testauth")]
+        [Authorize]
+        public ActionResult<string> GetSecretText()
+        {
+            return "secret stuff"
         }
 
         [HttpGet("notfound")]

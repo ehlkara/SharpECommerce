@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using SharpEcommerce.API.Errors;
 using SharpEcommerce.Core.Interfaces;
 using SharpEcommerce.Infrastructure.Data;
+using SharpEcommerce.Infrastructure.Services;
 using StackExchange.Redis;
 
 namespace SharpEcommerce.API.Extensions
@@ -25,6 +26,7 @@ namespace SharpEcommerce.API.Extensions
             });
             services.AddScoped<IBasketRepository, BasketRepository>();
             services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<ITokenService, TokenService>();
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.Configure<ApiBehaviorOptions>(options =>
