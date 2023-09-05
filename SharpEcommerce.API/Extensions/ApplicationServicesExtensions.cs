@@ -12,9 +12,6 @@ namespace SharpEcommerce.API.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-            services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
-
             services.AddDbContext<EcommerceDbContext>(opts =>
             {
                 opts.UseNpgsql(config.GetConnectionString("DefaultConnection"));
