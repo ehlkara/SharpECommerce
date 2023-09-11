@@ -30,7 +30,8 @@ import { TextInputComponent } from './component/text-input/text-input.component'
     CarouselModule,
     OrderTotalsComponent,
     ReactiveFormsModule,
-    BsDropdownModule
+    BsDropdownModule,
+    TextInputComponent
   ]
 })
 export class SharedModule { }
