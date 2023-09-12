@@ -1,4 +1,5 @@
 ﻿using SharpEcommerce.Core.Entities;
+using SharpEcommerce.Core.Entities.OrderAggregate;
 using System.Text.Json;
 
 namespace SharpEcommerce.Infrastructure.Data
@@ -26,7 +27,14 @@ namespace SharpEcommerce.Infrastructure.Data
                 context.Products.AddRange(products);
             }
 
-            if(context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
+            if (!context.DeliveryMethods.Any())
+            {
+                var deliveryData = File.ReadAllText("C:\\Users\\ehlka\\source\\repos\\SharpEcommerce\\SharpEcommerce.Infrastructure\\SeedData\\delivery.json");
+                var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
+                context.DeliveryMethods.AddRange(methods);
+            }
+
+            if (context.ChangeTracker.HasChanges()) await context.SaveChangesAsync();
         }
     }
 }
