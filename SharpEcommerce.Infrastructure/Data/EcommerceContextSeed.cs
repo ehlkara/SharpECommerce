@@ -29,7 +29,7 @@ namespace SharpEcommerce.Infrastructure.Data
 
             if (!context.DeliveryMethods.Any())
             {
-                var deliveryData = File.ReadAllText("C:\\Users\\ehlka\\source\\repos\\SharpEcommerce\\SharpEcommerce.Infrastructure\\SeedData\\delivery.json");
+                var deliveryData = File.ReadAllText("/Users/ehlkara/Documents/GitHub/SharpEcommerce/SharpEcommerce.Infrastructure/SeedData/delivery.json");
                 var methods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryData);
                 context.DeliveryMethods.AddRange(methods);
             }
