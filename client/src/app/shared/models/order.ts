@@ -19,7 +19,7 @@ export interface Order {
     buyerEmail: string;
     orderDate: string;
     shipToAddress: Address;
-    deliveryMethod: string;
+    deliveryMethodId: string;
     shippingPrice: number;
     orderItems: OrderItem[];
     subtotal: number;
