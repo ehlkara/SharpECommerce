@@ -3,11 +3,6 @@ using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Entities.OrderAggregate;
 using SharpEcommerce.Core.Interfaces;
 using Stripe;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Product = SharpEcommerce.Core.Entities.Product;
 
 namespace SharpEcommerce.Infrastructure.Services
