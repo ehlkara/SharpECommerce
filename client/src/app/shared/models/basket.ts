@@ -18,6 +18,9 @@ export interface Basket {
   export class Basket implements Basket {
     id = cuid();
     items: BasketItem[] = [];
+    clientSecret?: string;
+    paymentIntentId?: string;
+    deliveryMethodId?: number ;
   }
 
   export interface BasketTotals {
