@@ -49,7 +49,7 @@ namespace SharpEcommerce.Infrastructure.Data
             _context.Set<T>().Add(entity);
         }
 
-        public void Updater(T entity)
+        public void Update(T entity)
         {
             _context.Set<T>().Attach(entity);
             _context.Entry(entity).State = EntityState.Modified;

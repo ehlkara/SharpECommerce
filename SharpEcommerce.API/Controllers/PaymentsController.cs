@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SharpEcommerce.API.Errors;
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Interfaces;
 
@@ -20,7 +21,11 @@ namespace SharpEcommerce.API.Controllers
         [HttpPost("{basketId}")]
         public async Task<ActionResult<CustomerBasket>> CreateOrUpdatePaymentIntent(string basketId)
         {
-            return await _paymentService.CreateOrUpdatePaymentIntent(basketId);
+            var basket = await _paymentService.CreateOrUpdatePaymentIntent(basketId);
+
+            if (basket == null) return BadRequest(new ApiResponse(400, "Problem with your basket"));
+
+            return basket;
         }
     }
 }
