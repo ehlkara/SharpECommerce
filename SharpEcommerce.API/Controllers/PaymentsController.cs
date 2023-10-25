@@ -38,7 +38,13 @@ namespace SharpEcommerce.API.Controllers
         {
             var json = await new StreamReader(Request.Body).ReadToEndAsync();
 
-            var stripeEvent = EventUtility.ConstructEvent(json, Request.Headers["Stripe-Signature"], WhSecret);
+            var stripeEvent = EventUtility.ConstructEvent(
+    json,
+    Request.Headers["Stripe-Signature"],
+    WhSecret,
+    300,
+    (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
+    false);
 
             PaymentIntent intent;
             Order order;
