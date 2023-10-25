@@ -2,6 +2,7 @@
 using SharpEcommerce.Core.Entities;
 using SharpEcommerce.Core.Entities.OrderAggregate;
 using SharpEcommerce.Core.Interfaces;
+using SharpEcommerce.Core.Specifications;
 using Stripe;
 using Product = SharpEcommerce.Core.Entities.Product;
 
@@ -72,6 +73,30 @@ namespace SharpEcommerce.Infrastructure.Services
 
             await _basketRepository.UpdateBasketAsync(basket);
             return basket;
+        }
+
+        public async Task<Order> UpdateOrderPaymentFailed(string paymentId)
+        {
+            var spec = new OrderByPaymentIntentIdSpecification(paymentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (order == null) return null;
+            order.Status = OrderStatus.PaymentFailed;
+            await _unitOfWork.Complete();
+
+            return order;
+        }
+
+        public async Task<Order> UpdateOrderPaymentSucceeded(string paymentId)
+        {
+            var spec = new OrderByPaymentIntentIdSpecification(paymentId);
+            var order = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+
+            if (order == null) return null;
+            order.Status = OrderStatus.PaymentReceived;
+            await _unitOfWork.Complete();
+
+            return order;
         }
     }
 }
