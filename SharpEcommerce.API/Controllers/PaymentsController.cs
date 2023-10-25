@@ -12,7 +12,7 @@ namespace SharpEcommerce.API.Controllers
     [ApiController]
     public class PaymentsController : BaseApiController
     {
-        private const string WhSecret = "";
+        private const string WhSecret = "whsec_16e67035a47bc0108ef24831487c72a6163d1b16d0942f923a8cbf8170689c76";
         private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentsController> _logger;
 
@@ -33,7 +33,7 @@ namespace SharpEcommerce.API.Controllers
             return basket;
         }
 
-        [HttpPost]
+        [HttpPost("webhook")]
         public async Task<ActionResult> StripeWebHook()
         {
             var json = await new StreamReader(Request.Body).ReadToEndAsync();
