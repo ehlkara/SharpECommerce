@@ -12,14 +12,15 @@ namespace SharpEcommerce.API.Controllers
     [ApiController]
     public class PaymentsController : BaseApiController
     {
-        private const string WhSecret = "whsec_16e67035a47bc0108ef24831487c72a6163d1b16d0942f923a8cbf8170689c76";
+        private readonly string _whSecret;
         private readonly IPaymentService _paymentService;
         private readonly ILogger<PaymentsController> _logger;
 
-        public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger)
+        public PaymentsController(IPaymentService paymentService, ILogger<PaymentsController> logger, IConfiguration config)
         {
             _paymentService = paymentService;
             _logger = logger;
+            _whSecret = config.GetSection("StripeSettings:WhSecret").Value;
         }
 
         [Authorize]
@@ -41,7 +42,7 @@ namespace SharpEcommerce.API.Controllers
             var stripeEvent = EventUtility.ConstructEvent(
     json,
     Request.Headers["Stripe-Signature"],
-    WhSecret,
+    _whSecret,
     300,
     (long)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds,
     false);
@@ -58,7 +59,7 @@ namespace SharpEcommerce.API.Controllers
                     order = await _paymentService.UpdateOrderPaymentSucceeded(intent.Id);
                     _logger.LogInformation("Order updated to payment received: ", order.Id);
                     break;
-                case "payment_intent.failed":
+                case "payment_intent.payment_failed":
                     intent = (PaymentIntent)stripeEvent.Data.Object;
                     _logger.LogInformation("Payment failed: ", intent.Id);
                     // TODO: update the order with the new status
