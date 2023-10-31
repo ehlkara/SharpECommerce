@@ -5,7 +5,7 @@ import { Product } from '../shared/models/product';
 import { Brand } from '../shared/models/brand';
 import { Type } from '../shared/models/type';
 import { ShopParams } from '../shared/models/shopParams';
-import { map, of } from 'rxjs';
+import { Observable, map, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +15,24 @@ export class ShopService {
   products: Product[] = [];
   brands: Brand[] = [];
   types: Type[] = [];
-  pagination?:Pagination<Product[]>;
+  pagination?: Pagination<Product[]>;
   shopParams = new ShopParams();
+  productCache = new Map<string, Pagination<Product[]>>();
 
   constructor(private http: HttpClient) { }
 
-  getProducts() {
+  getProducts(useCache = true): Observable<Pagination<Product[]>> {
+
+    if (!useCache) this.productCache = new Map();
+
+    if (this.productCache.size > 0 && useCache) {
+      if (this.productCache.has(Object.values(this.shopParams).join('-'))) {
+        this.pagination = this.productCache.get(Object.values(this.shopParams).join('-'));
+        if (this.pagination)
+          return of(this.pagination);
+      }
+    }
+
     let params = new HttpParams();
 
     if (this.shopParams.brandId > 0) params = params.append('brandId', this.shopParams.brandId)
@@ -32,7 +44,7 @@ export class ShopService {
 
     return this.http.get<Pagination<Product[]>>(this.baseUrl + 'products', { params }).pipe(
       map(response => {
-        this.products = [...this.products, ...response.data];
+        this.productCache.set(Object.values(this.shopParams).join('-'), response);
         this.pagination = response;
         return response;
       })
@@ -48,22 +60,25 @@ export class ShopService {
   }
 
   getProduct(id: number) {
-    const product = this.products.find(p => p.id === id);
+    const product = [...this.productCache.values()]
+    .reduce((acc, paginationResult) => {
+      return {...acc, ...paginationResult.data.find(x => x.id === id)}
+    }, {} as Product);
 
-    if(product) return of(product);
+    if (Object.keys(product).length !== 0) return of(product);
 
     return this.http.get<Product>(this.baseUrl + 'products/' + id);
   }
 
   getBrands() {
-    if(this.brands.length > 0) return of(this.brands);
+    if (this.brands.length > 0) return of(this.brands);
 
     return this.http.get<Brand[]>(this.baseUrl + 'products/brands').pipe(
       map(brands => brands = brands)
     );
   }
   getTypes() {
-    if(this.types.length > 0) return of(this.types);
+    if (this.types.length > 0) return of(this.types);
 
     return this.http.get<Type[]>(this.baseUrl + 'products/types').pipe(
       map(types => this.types = types)
